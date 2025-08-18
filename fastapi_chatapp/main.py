@@ -15,21 +15,19 @@ app = FastAPI()
 
 from fastapi.middleware.cors import CORSMiddleware
 
-# 開発中は広めに許可でOK。あとで本番ドメインだけに絞る
 origins = [
     "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    # デプロイ後のフロントURL（Vercel/Netlify）もここに追加していく
-    # 例: "https://fastapi-chat-ui.vercel.app",
+    "https://fastapi-chat-ui.vercel.app",  # ← 追加
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,        # 開発では一旦 ["*"] でもOK（要: allow_credentials=False）
-    allow_credentials=False,      # Cookie認証を使わないなら False 推奨
-    allow_methods=["*"],          # 少なくとも ["POST","OPTIONS"] は必要
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 class ChatRequest(BaseModel):
