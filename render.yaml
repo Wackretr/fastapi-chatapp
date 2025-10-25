@@ -4,7 +4,7 @@ services:
     env: python
     plan: starter
     region: singapore
-    pythonVersion: 3.11
+    pythonVersion: "3.11"
     buildCommand: poetry install
     startCommand: poetry run uvicorn fastapi_chatapp.main:app --host 0.0.0.0 --port $PORT
     envVars:
