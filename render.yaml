@@ -19,10 +19,11 @@ services:
       - key: CORS_ALLOW_ORIGINS
         value: https://fastapi-chatapp-frontend.onrender.com
 
-staticSites:
-  - name: fastapi-chatapp-frontend
+  - type: web
+    name: fastapi-chatapp-frontend
+    env: static
     buildCommand: cd fastapi-chat-ui && npm install && npm run build
-    publishPath: fastapi-chat-ui/dist
+    staticPublishPath: fastapi-chat-ui/dist
     envVars:
       - key: VITE_API_BASE
         fromService:
