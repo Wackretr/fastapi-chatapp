@@ -1,1 +1,8 @@
 .env
+.DS_Store
+.chroma/
+__pycache__/
+*.pyc
+tests/__pycache__/
+fastapi-chat-ui/node_modules/
+fastapi-chat-ui/.vite/
