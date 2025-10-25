@@ -2,7 +2,7 @@ services:
   - type: web
     name: fastapi-chatapp-backend
     env: python
-    plan: starter
+    plan: free
     region: singapore
     buildCommand: poetry install
     startCommand: poetry run uvicorn fastapi_chatapp.main:app --host 0.0.0.0 --port $PORT
