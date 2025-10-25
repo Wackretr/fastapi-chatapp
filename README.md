@@ -29,8 +29,8 @@ npm run dev
    - **fastapi-chatapp-frontend（Static Site）**  
      - Build: `cd fastapi-chat-ui && npm install && npm run build`  
      - Publish: `fastapi-chat-ui/dist`  
-     - 環境変数：`VITE_API_BASE`（バックエンド URL を Blueprint で連携済み）。
-3. Blueprint ではフロント URL を `https://fastapi-chatapp-frontend.onrender.com` としてバックエンドの `CORS_ALLOW_ORIGINS` に設定しています。独自ドメインを割り当てる場合は Render ダッシュボードで同環境変数を更新してください。
-4. デプロイ完了後、フロントの `VITE_API_BASE` にはバックエンドの公開 URL が自動で注入されるため、ブラウザから直接 API 呼び出しが行えます。
+     - 環境変数：`VITE_API_BASE`（デフォルトで `https://fastapi-chatapp-backend.onrender.com` を指定。バックエンドの URL が変わった場合は手動で更新）。
+3. Blueprint ではフロント URL を `https://fastapi-chatapp-frontend.onrender.com` としてバックエンドの `CORS_ALLOW_ORIGINS` に設定しています。独自ドメインを割り当てる場合は Render ダッシュボードで `CORS_ALLOW_ORIGINS` と `VITE_API_BASE` の両方を更新してください。
+4. デプロイ完了後、フロントとバックエンドの公開 URL を Render ダッシュボードで確認し、必要に応じて環境変数を調整してください。
 
 参考: `.env.example` と `render.yaml` の環境変数キーが揃っているので、ローカル／本番の双方で同じ変数名を利用できます。

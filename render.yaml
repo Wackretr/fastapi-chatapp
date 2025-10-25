@@ -25,7 +25,4 @@ services:
     staticPublishPath: fastapi-chat-ui/dist
     envVars:
       - key: VITE_API_BASE
-        fromService:
-          type: web
-          name: fastapi-chatapp-backend
-          property: url
+        value: https://fastapi-chatapp-backend.onrender.com

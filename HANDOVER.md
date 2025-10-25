@@ -42,13 +42,13 @@ npm run dev
 
 ## Render デプロイ手順
 1. `render.yaml` が Blueprint としてリポジトリ直下にあるため、Render ダッシュボードで **New ➜ Blueprint** を選択し、このリポジトリを指定する。
-2. 生成されるサービス:
+ 2. 生成されるサービス:
    - **fastapi-chatapp-backend**（Web Service / Python）  
      Build: `poetry install` / Start: `poetry run uvicorn fastapi_chatapp.main:app --host 0.0.0.0 --port $PORT`  
      `OPENAI_API_KEY` は Dashboard で Secret として入力。`CORS_ALLOW_ORIGINS` には `https://fastapi-chatapp-frontend.onrender.com` が事前設定されているので、独自ドメインを使う場合はここを更新する。
    - **fastapi-chatapp-frontend**（Static Site）  
      Build: `cd fastapi-chat-ui && npm install && npm run build` / Publish: `fastapi-chat-ui/dist`  
-     `VITE_API_BASE` は Blueprint がバックエンド URL を参照する形で自動設定。
+     `VITE_API_BASE` にはデフォルトで `https://fastapi-chatapp-backend.onrender.com` を設定。バックエンドの URL を変更した場合は手動で更新する。
 3. デプロイ完了後、フロントの公開 URL（例: `https://fastapi-chatapp-frontend.onrender.com`）でチャット UI、バックエンドの Web Service URL で API が利用可能。必要ならば Render 側で Custom Domain、Auto Deploy 設定を有効にする。
 
 ## 未対応・TODO
