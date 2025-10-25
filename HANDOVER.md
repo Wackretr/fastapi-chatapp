@@ -36,8 +36,20 @@ npm run dev
 - `HANDOVER.md`, `INSTRUCTIONS.md` : 現在の資料一式。
 
 ## 環境変数／機密情報
-- `.env`（未同梱）で `OPENAI_API_KEY`, `OPENAI_MODEL`, `QA_XLSX_PATH`, `HIKITSUGI_MD_PATH` などを設定。
+- `.env`（未同梱）で `OPENAI_API_KEY`, `OPENAI_MODEL`, `QA_XLSX_PATH`, `HIKITSUGI_MD_PATH` を設定。
+- CORS 許可ドメインは `CORS_ALLOW_ORIGINS`（カンマ区切り）および必要に応じて `CORS_ALLOW_ORIGIN_REGEX` で上書き可能。デフォルトは `http://localhost:5173` と `https://fastapi-chat-ui.vercel.app`。
 - フロント側で API ベース URL を切り替える場合は `.env.local` に `VITE_API_BASE` を設定。
+
+## Render デプロイ手順
+1. `render.yaml` が Blueprint としてリポジトリ直下にあるため、Render ダッシュボードで **New ➜ Blueprint** を選択し、このリポジトリを指定する。
+2. 生成されるサービス:
+   - **fastapi-chatapp-backend**（Web Service / Python）  
+     Build: `poetry install` / Start: `poetry run uvicorn fastapi_chatapp.main:app --host 0.0.0.0 --port $PORT`  
+     `OPENAI_API_KEY` は Dashboard で Secret として入力。`CORS_ALLOW_ORIGINS` には `https://fastapi-chatapp-frontend.onrender.com` が事前設定されているので、独自ドメインを使う場合はここを更新する。
+   - **fastapi-chatapp-frontend**（Static Site）  
+     Build: `cd fastapi-chat-ui && npm install && npm run build` / Publish: `fastapi-chat-ui/dist`  
+     `VITE_API_BASE` は Blueprint がバックエンド URL を参照する形で自動設定。
+3. デプロイ完了後、フロントの公開 URL（例: `https://fastapi-chatapp-frontend.onrender.com`）でチャット UI、バックエンドの Web Service URL で API が利用可能。必要ならば Render 側で Custom Domain、Auto Deploy 設定を有効にする。
 
 ## 未対応・TODO
 - React テストの `act` 警告解消（`userEvent` 操作後に `await act(async () => …)` または `waitFor` を適用）。

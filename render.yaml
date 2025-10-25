@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: fastapi-chatapp-backend
+    env: python
+    plan: starter
+    region: singapore
+    pythonVersion: 3.11
+    buildCommand: poetry install
+    startCommand: poetry run uvicorn fastapi_chatapp.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false  # Render Dashboard で設定
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: QA_XLSX_PATH
+        value: fastapi_chatapp/data/QAset.xlsx
+      - key: HIKITSUGI_MD_PATH
+        value: fastapi_chatapp/data/hikitsugi.md
+      - key: CORS_ALLOW_ORIGINS
+        value: https://fastapi-chatapp-frontend.onrender.com
+
+  - type: static
+    name: fastapi-chatapp-frontend
+    buildCommand: cd fastapi-chat-ui && npm install && npm run build
+    publishPath: fastapi-chat-ui/dist
+    envVars:
+      - key: VITE_API_BASE
+        fromService:
+          type: web
+          name: fastapi-chatapp-backend
+          property: url

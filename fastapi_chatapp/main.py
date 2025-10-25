@@ -29,17 +29,38 @@ from langchain.schema.runnable import RunnableLambda
 load_dotenv()  # OPENAI_API_KEY, OPENAI_MODEL, QA_XLSX_PATH, HIKITSUGI_MD_PATH を読む
 app = FastAPI(title="fastapi-chatapp")
 
-# CORS（必要に応じて編集）
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
+
+def _load_allowed_origins() -> list[str]:
+    """環境変数 CORS_ALLOW_ORIGINS（カンマ区切り）を優先し、デフォルト値を補完する。"""
+    defaults = [
         "http://localhost:5173",
         "https://fastapi-chat-ui.vercel.app",
-    ],
+    ]
+    raw = os.getenv("CORS_ALLOW_ORIGINS", "")
+    extras = [item.strip() for item in raw.split(",") if item.strip()]
+    combined = defaults + extras
+    seen: set[str] = set()
+    result: list[str] = []
+    for origin in combined:
+        if origin not in seen:
+            seen.add(origin)
+            result.append(origin)
+    return result
+
+
+cors_kwargs: dict[str, Any] = dict(
+    allow_origins=_load_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+origin_regex = os.getenv("CORS_ALLOW_ORIGIN_REGEX")
+if origin_regex:
+    cors_kwargs["allow_origin_regex"] = origin_regex
+
+# CORS（Render や Vercel デプロイ時は環境変数で上書き）
+app.add_middleware(CORSMiddleware, **cors_kwargs)
 
 # ルート/ヘルス
 @app.get("/")
